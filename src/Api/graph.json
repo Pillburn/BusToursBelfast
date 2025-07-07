@@ -1,0 +1,292 @@
+{
+  "format": 1,
+  "restore": {
+    "/Users/spec.ref/BusToursBelfast/src/Api/ToursApp.Api.csproj": {},
+    "/Users/spec.ref/BusToursBelfast/src/Application/ToursApp.Application.csproj": {},
+    "/Users/spec.ref/BusToursBelfast/src/Domain/ToursApp.Domain.csproj": {},
+    "/Users/spec.ref/BusToursBelfast/src/Infrastructure/ToursApp.Infrastructure.csproj": {}
+  },
+  "projects": {
+    "/Users/spec.ref/BusToursBelfast/src/Api/ToursApp.Api.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/spec.ref/BusToursBelfast/src/Api/ToursApp.Api.csproj",
+        "projectName": "ToursApp.Api",
+        "projectPath": "/Users/spec.ref/BusToursBelfast/src/Api/ToursApp.Api.csproj",
+        "packagesPath": "/Users/spec.ref/.nuget/packages/",
+        "outputPath": "/Users/spec.ref/BusToursBelfast/src/Api/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/spec.ref/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "/usr/local/share/dotnet/library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "/Users/spec.ref/BusToursBelfast/src/Application/ToursApp.Application.csproj": {
+                "projectPath": "/Users/spec.ref/BusToursBelfast/src/Application/ToursApp.Application.csproj"
+              },
+              "/Users/spec.ref/BusToursBelfast/src/Infrastructure/ToursApp.Infrastructure.csproj": {
+                "projectPath": "/Users/spec.ref/BusToursBelfast/src/Infrastructure/ToursApp.Infrastructure.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.200"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.OpenApi": {
+              "target": "Package",
+              "version": "[9.0.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.202/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/spec.ref/BusToursBelfast/src/Application/ToursApp.Application.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/spec.ref/BusToursBelfast/src/Application/ToursApp.Application.csproj",
+        "projectName": "ToursApp.Application",
+        "projectPath": "/Users/spec.ref/BusToursBelfast/src/Application/ToursApp.Application.csproj",
+        "packagesPath": "/Users/spec.ref/.nuget/packages/",
+        "outputPath": "/Users/spec.ref/BusToursBelfast/src/Application/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/spec.ref/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "/usr/local/share/dotnet/library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "/Users/spec.ref/BusToursBelfast/src/Domain/ToursApp.Domain.csproj": {
+                "projectPath": "/Users/spec.ref/BusToursBelfast/src/Domain/ToursApp.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.200"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[15.0.0, )"
+            },
+            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[12.0.1, )"
+            },
+            "MediatR": {
+              "target": "Package",
+              "version": "[13.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.202/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/spec.ref/BusToursBelfast/src/Domain/ToursApp.Domain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/spec.ref/BusToursBelfast/src/Domain/ToursApp.Domain.csproj",
+        "projectName": "ToursApp.Domain",
+        "projectPath": "/Users/spec.ref/BusToursBelfast/src/Domain/ToursApp.Domain.csproj",
+        "packagesPath": "/Users/spec.ref/.nuget/packages/",
+        "outputPath": "/Users/spec.ref/BusToursBelfast/src/Domain/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/spec.ref/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "/usr/local/share/dotnet/library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.200"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.202/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/spec.ref/BusToursBelfast/src/Infrastructure/ToursApp.Infrastructure.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/spec.ref/BusToursBelfast/src/Infrastructure/ToursApp.Infrastructure.csproj",
+        "projectName": "ToursApp.Infrastructure",
+        "projectPath": "/Users/spec.ref/BusToursBelfast/src/Infrastructure/ToursApp.Infrastructure.csproj",
+        "packagesPath": "/Users/spec.ref/.nuget/packages/",
+        "outputPath": "/Users/spec.ref/BusToursBelfast/src/Infrastructure/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/spec.ref/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "/usr/local/share/dotnet/library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "/Users/spec.ref/BusToursBelfast/src/Application/ToursApp.Application.csproj": {
+                "projectPath": "/Users/spec.ref/BusToursBelfast/src/Application/ToursApp.Application.csproj"
+              },
+              "/Users/spec.ref/BusToursBelfast/src/Domain/ToursApp.Domain.csproj": {
+                "projectPath": "/Users/spec.ref/BusToursBelfast/src/Domain/ToursApp.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.200"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.202/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
