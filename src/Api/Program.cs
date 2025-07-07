@@ -1,9 +1,24 @@
+using Microsoft.Extensions.DependencyInjection;
+using ToursApp.Application.Common.Mappings;
+using ToursApp.Application.Tours.Queries;
+using ToursApp.Application;
+using ToursApp.Domain.Entities;
+using ToursApp.Infrastructure;
 var builder = WebApplication.CreateBuilder(args);
+builder.Services
+    .AddApplicationServices();  // From Application layer
+    
+builder.Services
+    .AddInfrastructureServices(builder.Configuration);  // From Infrastructure layer
+
+builder.Services.AddMediatR(cfg => 
+    cfg.RegisterServicesFromAssembly(typeof(GetToursQuery).Assembly));
+
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-
+builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
