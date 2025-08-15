@@ -1,12 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using ToursApp.Domain.Entities;
-using ToursApp.Domain.Interfaces; 
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using ToursApp.Infrastructure.Persistence;
-using ToursApp.Infrastructure.Repositories; 
+using ToursApp.Infrastructure.Persistence.Configurations;
 // src/Infrastructure/Persistence/AppDbContext.cs
 namespace ToursApp.Infrastructure.Persistence;
 
@@ -14,13 +8,19 @@ public class AppDbContext : DbContext
 {
     public DbSet<Tour> Tours => Set<Tour>();
     public DbSet<Booking> Bookings => Set<Booking>();
+    public DbSet<PaymentIntent> paymentIntents => Set<PaymentIntent>();
+    public DbSet<Charge> Charges => Set<Charge>();
 
     public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfigurationsFromAssembly(
+            modelBuilder.ApplyConfiguration(new BookingConfiguration());
+            modelBuilder.ApplyConfiguration(new TourConfiguration());
+            modelBuilder.ApplyConfiguration(new PaymentIntentConfiguration());
+            modelBuilder.ApplyConfiguration(new ChargeConfiguration());
+            modelBuilder.ApplyConfigurationsFromAssembly(
             typeof(AppDbContext).Assembly);
     }
 }

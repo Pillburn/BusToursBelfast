@@ -1,16 +1,12 @@
 import { Grid} from "@mui/material";
-import Activitylist from "./ActivityList";
-import ActivityFilters from "./ActivityFilters";
+import TourOptions from "./TourOptions";
 
 export default function TourDashboard() {
   
   return (
     <Grid container spacing={3} sx={{display:'flex'}}>
       <Grid size={8}>
-        <Activitylist />
-      </Grid>
-      <Grid size={4}>
-        <ActivityFilters/>
+        <TourOptions />
       </Grid>
     </Grid>
   )

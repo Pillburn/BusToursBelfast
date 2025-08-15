@@ -9,7 +9,7 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<Tour, TourDto>()
-            .ForMember(d => d.EndDate, opt => opt.MapFrom(s => s.StartDate.AddDays(s.DurationDays)));
+        //CreateMap<Tour, TourDto>()
+          //  .ForMember(d => d.EndDate, opt => opt.MapFrom(s => s.StartDate.AddDays(s.DurationDays)));
     }
 }

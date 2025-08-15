@@ -1,4 +1,4 @@
-// src/Application/Tours/Queries/GetToursQuery.cs
+// src/Application/Tours/Queries/GetToursList.cs
 using ToursApp.Application.Tours.DTOs;
 using ToursApp.Domain.Interfaces;
 using MediatR;                   // For IRequest and IRequestHandler
