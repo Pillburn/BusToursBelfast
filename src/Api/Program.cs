@@ -4,6 +4,9 @@ using ToursApp.Application.Tours.Queries;
 using ToursApp.Application;
 using ToursApp.Domain.Entities;
 using ToursApp.Infrastructure;
+using ToursApp.Infrastructure.Services;
+using ToursApp.Application.Common.Interfaces;
+using ToursApp.Infrastructure.Persistence.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services
     .AddApplicationServices();  // From Application layer
@@ -14,11 +17,13 @@ builder.Services
 builder.Services.AddMediatR(cfg => 
     cfg.RegisterServicesFromAssembly(typeof(GetToursQuery).Assembly));
 
-
+var configuration = builder.Configuration;
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
+builder.Services.Configure<StripeSettings>(configuration.GetSection("StripeSettings"));
+builder.Services.AddScoped<IStripeGate, StripeGateway>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
