@@ -1,5 +1,7 @@
 // Application/Common/Interfaces/IPaymentWebhookService.cs
+namespace ToursApp.Application.Common.Interfaces;
+
 public interface IPaymentWebhookService
 {
-    Task ProcessWebhookEventAsync(string json, string stripeSignature);
+    Task<bool> ProcessWebhookAsync(string json, string stripeSignature);
 }
