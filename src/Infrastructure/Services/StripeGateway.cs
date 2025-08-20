@@ -1,4 +1,5 @@
 // Infrastructure/Services/StripeGateway.cs
+using Azure.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Stripe;
@@ -60,5 +61,38 @@ public class StripeGateway : IStripeGate
         return await service.CreateAsync(options);
     }
 
-    // Additional Stripe operations can be added here
+    public async Task<ToursApp.Domain.Entities.PaymentIntent> CreatePaymentIntentAsync(decimal amount, string currency,string createdBy)
+{
+    var options = new Stripe.PaymentIntentCreateOptions
+    {
+        Amount = (long)(amount * 100), // Convert to cents
+        Currency = currency.ToLower(),
+        PaymentMethodTypes = new List<string> { "card" }
+    };
+
+    var service = new Stripe.PaymentIntentService();
+    var stripeIntent = await service.CreateAsync(options);
+
+        // Convert Stripe model to domain model
+    return new ToursApp.Domain.Entities.PaymentIntent(
+            stripeIntent.Id,
+            amount,
+            currency,
+            stripeIntent.ClientSecret,
+            createdBy,
+            MapStatus(stripeIntent.Status)
+            );
+}
+
+private PaymentIntentStatus MapStatus(string stripeStatus) => stripeStatus switch
+{
+    "requires_payment_method" => PaymentIntentStatus.RequiresPaymentMethod,
+    "requires_confirmation" => PaymentIntentStatus.RequiresConfirmation,
+    "requires_action" => PaymentIntentStatus.RequiresAction,
+    "processing" => PaymentIntentStatus.Processing,
+    "succeeded" => PaymentIntentStatus.Succeeded,
+    "canceled" => PaymentIntentStatus.Canceled,
+    _ => PaymentIntentStatus.RequiresPaymentMethod
+};
+
 }

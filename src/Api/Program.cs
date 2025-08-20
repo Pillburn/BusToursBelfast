@@ -6,7 +6,8 @@ using ToursApp.Domain.Entities;
 using ToursApp.Infrastructure;
 using ToursApp.Infrastructure.Services;
 using ToursApp.Application.Common.Interfaces;
-using ToursApp.Infrastructure.Persistence.Repositories;
+using ToursApp.Infrastructure.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services
     .AddApplicationServices();  // From Application layer
@@ -24,6 +25,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 builder.Services.Configure<StripeSettings>(configuration.GetSection("StripeSettings"));
 builder.Services.AddScoped<IStripeGate, StripeGateway>();
+builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

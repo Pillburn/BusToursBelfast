@@ -8,7 +8,9 @@ public class AppDbContext : DbContext
 {
     public DbSet<Tour> Tours => Set<Tour>();
     public DbSet<Booking> Bookings => Set<Booking>();
-    public DbSet<PaymentIntent> paymentIntents => Set<PaymentIntent>();
+
+    public DbSet<Payment> Payments => Set<Payment>();
+    public DbSet<PaymentIntent> PaymentIntents => Set<PaymentIntent>();
     public DbSet<Charge> Charges => Set<Charge>();
 
     public AppDbContext(DbContextOptions<AppDbContext> options)
@@ -16,6 +18,10 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Charge>(b =>
+        {
+            b.Property(c => c.CreatedBy).HasDefaultValue("system");
+        });
             modelBuilder.ApplyConfiguration(new BookingConfiguration());
             modelBuilder.ApplyConfiguration(new TourConfiguration());
             modelBuilder.ApplyConfiguration(new PaymentIntentConfiguration());

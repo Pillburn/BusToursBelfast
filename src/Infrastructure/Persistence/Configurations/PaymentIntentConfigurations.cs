@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
+using ToursApp.Domain.Entities;
 public class PaymentIntentConfiguration : IEntityTypeConfiguration<PaymentIntent>
 {
     public void Configure(EntityTypeBuilder<PaymentIntent> builder)

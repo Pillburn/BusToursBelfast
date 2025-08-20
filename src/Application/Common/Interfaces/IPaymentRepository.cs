@@ -7,10 +7,13 @@ public interface IPaymentRepository
 {
     // Payment Intent operations
     Task<PaymentIntent?> GetByStripeIdAsync(string stripePaymentIntentId);
-    Task AddPaymentIntentAsync(PaymentIntent paymentIntent);
+    Task AddPaymentIntentAsync(PaymentIntent paymentIntent,CancellationToken cancellationToken);
+
+    Task AddPaymentAsync(Payment payment, CancellationToken cancellationToken);
+
     
     // Charge operations
-    Task<Charge?> GetByChargeIdAsync(string stripeChargeId);
+    Task<Payment> GetByChargeIdAsync(string stripeChargeId);
     Task AddChargeAsync(Charge charge);
     
     // General operations

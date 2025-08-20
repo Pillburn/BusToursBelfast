@@ -1,6 +1,7 @@
 // Infrastructure/Persistence/Configurations/ChargeConfiguration.cs
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using ToursApp.Domain.Entities;
 
 public class ChargeConfiguration : IEntityTypeConfiguration<Charge>
 {

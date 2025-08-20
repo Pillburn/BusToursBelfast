@@ -6,7 +6,7 @@ namespace ToursApp.Application.Common.Interfaces;
 
 public interface IApplicationDbContext
 {
-    DbSet<Booking> Bookings { get; }
+    DbSet<ToursApp.Domain.Entities.Booking> Bookings { get; }
     DbSet<Tour> Tours { get; }
     DbSet<PaymentIntent> PaymentIntents { get; }
     DbSet<Charge> Charges { get; }

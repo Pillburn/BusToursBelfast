@@ -1,5 +1,6 @@
 // Application/Services/PaymentWebhookService.cs
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Stripe;
 using ToursApp.Application.Common.Interfaces;
 public class PaymentWebhookService : IPaymentWebhookService
@@ -7,49 +8,67 @@ public class PaymentWebhookService : IPaymentWebhookService
     private readonly IStripeGate _stripeGate;
     private readonly IPaymentRepository _paymentRepository;
     private readonly IMediator _mediator;
+    private readonly ILogger<PaymentWebhookService> _logger;
 
     public PaymentWebhookService(
         IStripeGate stripeGateway,
         IPaymentRepository paymentRepository,
-        IMediator mediator)
+        IMediator mediator,
+        ILogger<PaymentWebhookService> logger)
     {
-        _stripeGate = stripeGateway;
-        _paymentRepository = paymentRepository;
-        _mediator = mediator;
+        _stripeGate = stripeGateway ?? throw new ArgumentNullException(nameof(stripeGateway));
+        _paymentRepository = paymentRepository ?? throw new ArgumentNullException(nameof(paymentRepository));
+        _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
 
     public async Task ProcessWebhookEventAsync(string json, string stripeSignature)
     {
-        var stripeEvent = await _stripeGate.ConstructEventAsync(json, stripeSignature);
-
-        switch (stripeEvent.Type)
+        try
         {
-            case "payment_intent.succeeded":  // Now using raw strings
-                await HandlePaymentIntentSucceeded(stripeEvent);
-                break;
+            var stripeEvent = await _stripeGate.ConstructEventAsync(json, stripeSignature);
 
-            case "charge.refunded":
-                await HandleChargeRefunded(stripeEvent);
-                break;
+            if (stripeEvent?.Data?.Object == null)
+            {
+                _logger.LogWarning("Stripe event or data object is null");
+                return;
+            }
 
-            case "payment_intent.payment_failed":
-                await HandlePaymentFailed(stripeEvent);
-                break;
+            switch (stripeEvent.Type)
+            {
+                case "payment_intent.succeeded":  // Now using raw strings
+                    await HandlePaymentIntentSucceeded(stripeEvent);
+                    break;
+
+                case "charge.refunded":
+                    await HandleChargeRefunded(stripeEvent);
+                    break;
+
+                case "payment_intent.payment_failed":
+                    await HandlePaymentFailed(stripeEvent);
+                    break;
+            }
         }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error processing webhook event");
+            throw;
+         }
     }
-
+    
     private async Task HandlePaymentIntentSucceeded(Event stripeEvent)
-    {
-        var paymentIntent = stripeEvent.Data.Object as PaymentIntent;
-        var charge = paymentIntent.Charges.First();
-
-        await _mediator.Publish(new PaymentSucceededNotification(
+{
+    var paymentIntent = stripeEvent.Data.Object as PaymentIntent;
+    // Use the latest charge (modified for Stripe.net v40+)
+    var chargeId = paymentIntent.LatestChargeId;
+    
+    await _mediator.Publish(new PaymentSucceededNotification(
             paymentIntent.Id,
-            charge.Id,
+            chargeId,  // Now using the charge ID directly
             paymentIntent.Amount / 100m,
             paymentIntent.Currency));
-    }
+}
 
     private async Task HandleChargeRefunded(Event stripeEvent)
     {

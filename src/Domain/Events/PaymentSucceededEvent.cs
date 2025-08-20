@@ -3,9 +3,9 @@ using ToursApp.Domain.Common;
 using ToursApp.Domain.Entities;
 
 namespace ToursApp.Domain.Events;
-public class PaymentRefundedEvent : DomainEvent
+public class PaymentSucceededEvent : DomainEvent
 {
-    public PaymentRefundedEvent(Payment payment)
+    public PaymentSucceededEvent(Payment payment)
     {
         Payment = payment;
     }

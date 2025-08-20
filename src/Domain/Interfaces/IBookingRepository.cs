@@ -10,5 +10,7 @@ public interface IBookingRepository
     Task AddAsync(Booking booking);
     Task UpdateAsync(Booking booking);
     Task DeleteAsync(Guid id);
+    Task<Booking?> GetByPaymentIntentIdAsync(string paymentIntentId, CancellationToken cancellationToken);
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }
 
