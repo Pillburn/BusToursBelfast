@@ -7,22 +7,22 @@ public class Tour
     public string Name { get; private set; }
     public string Description { get; private set; }
     public decimal Price { get; private set; }
-    public int DurationDays { get; private set; }
-    public DateTime StartDate { get; private set; }
-    public DateTime EndDate => StartDate.AddDays(DurationDays);
+    public int GroupSize { get; private set; }
+    public DateTime BookingDate { get; private set; }
+    public DateTime TourDate { get; init; } 
     public bool IsActive { get; private set; } = true;
 
     // Private constructor for EF Core
     private Tour() { }
 
-    public Tour(string name, string description, decimal price, int durationDays, DateTime startDate)
+    public Tour(string name, string description, decimal price, int groupSize, DateTime tourDate)
     {
         Id = Guid.NewGuid();
         Name = name;
         Description = description;
         Price = price;
-        DurationDays = durationDays;
-        StartDate = startDate;
+        GroupSize = groupSize;
+        TourDate = tourDate;
         Validate();
     }
 

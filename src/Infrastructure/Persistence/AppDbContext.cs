@@ -1,10 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using ToursApp.Domain.Entities;
 using ToursApp.Infrastructure.Persistence.Configurations;
+using ToursApp.Application.Common.Interfaces;
 // src/Infrastructure/Persistence/AppDbContext.cs
 namespace ToursApp.Infrastructure.Persistence;
 
-public class AppDbContext : DbContext
+public class AppDbContext : DbContext, IApplicationDbContext
 {
     public DbSet<Tour> Tours => Set<Tour>();
     public DbSet<Booking> Bookings => Set<Booking>();

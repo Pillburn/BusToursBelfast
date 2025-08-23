@@ -10,11 +10,11 @@ using ToursApp.Infrastructure.Persistence;
 
 namespace ToursApp.Infrastructure.Repositories;
 
-public class BookingRepository : IBookingRepository
+public class BookingRepo : IBookingRepository
 {
     private readonly AppDbContext _context;
 
-    public BookingRepository(AppDbContext context)
+    public BookingRepo(AppDbContext context)
     {
         _context = context;
     }

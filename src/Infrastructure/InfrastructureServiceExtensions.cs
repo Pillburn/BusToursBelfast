@@ -16,7 +16,7 @@ public static class InfrastructureServiceExtensions
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
         // Register other infrastructure services
-        services.AddScoped<ITourRepository, TourRepository>();
+        services.AddScoped<ITourRepository, InMemoryTourRepository>();
 
         return services;
     }

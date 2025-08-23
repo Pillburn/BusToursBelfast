@@ -24,7 +24,7 @@ public class GetToursQueryHandler : IRequestHandler<GetToursQuery, IEnumerable<T
         GetToursQuery request, 
         CancellationToken cancellationToken)
     {
-        var tours = await _repository.GetAllAsync(request.IncludeInactive);
+        var tours = await _repository.GetAllToursAsync(request.IncludeInactive);
         return _mapper.Map<IEnumerable<TourDto>>(tours);
     }
 }
