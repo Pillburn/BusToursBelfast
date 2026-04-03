@@ -1,9 +1,6 @@
 // tests/Application.UnitTests/Features/Payments/CreatePaymentIntentTests.cs
-using NUnit.Framework;
-using Application.Features.Payments.Commands.CreatePaymentIntent;
-
 namespace Application.UnitTests.Features.Payments;
-
+using  ToursApp.Application.Payments.Commands;
 [TestFixture]
 public class CreatePaymentIntentTests
 {

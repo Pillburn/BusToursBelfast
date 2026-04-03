@@ -2,7 +2,7 @@ import { AppBar, Box, LinearProgress, MenuItem, Toolbar, Typography } from "@mui
 import { useStore } from "../../../lib/hooks/useStore";
 import { useEffect, useState } from "react";
 import { Group } from "@mui/icons-material";
-import { NavLink } from "react-router";
+import { NavLink } from "react-router-dom";
 import MenuItemLink from "../shared/components/MenuItemLink";
 
 
@@ -33,7 +33,12 @@ export default function Navbar() {
   }
 
   return (
-    <AppBar position="static">
+    <Box>
+    <AppBar position="static" sx={{
+        backgroundImage: 'linear-gradient(120deg,rgb(114, 139, 114) 12%, #53a653 30%, #2e662e 60%)',
+        position:'relative'
+      }
+        }>
      
       <Toolbar sx={{display:'flex', justifyContent: 'space-between'}}>
                 <Box>
@@ -45,7 +50,7 @@ export default function Navbar() {
                     </MenuItem>
                 </Box>
                 <Box sx={{display:'flex'}}>
-                    <MenuItemLink to='/activities'>
+                    <MenuItemLink to='/tours'>
                     Tours
                     </MenuItemLink>
                     <MenuItemLink to='/about'>
@@ -61,5 +66,6 @@ export default function Navbar() {
         {debouncedIsLoading && <LinearProgress />}
       </Toolbar>
     </AppBar>
+    </Box>
   );
 }

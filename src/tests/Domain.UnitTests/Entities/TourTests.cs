@@ -20,7 +20,7 @@ public class TourTests
         );
         
         // Assert
-        Assert.That(tour.DurationDays, Is.GreaterThan(0));
+        Assert.That(tour.Price, Is.GreaterThan(0));
     }
 
     [Test]

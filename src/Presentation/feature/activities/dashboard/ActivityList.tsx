@@ -1,8 +1,8 @@
+/** 
 import Box from "@mui/material/Box";
 import ActivityCard from "./ActivityCard";
 import { useActivities } from "../../../lib/hooks/useActivities";
 import { Typography } from "@mui/material";
-
 
 
 export default function Activitylist() {
@@ -21,3 +21,4 @@ export default function Activitylist() {
     
   )
 }
+**/
