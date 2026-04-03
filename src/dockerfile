@@ -1,21 +1,20 @@
 # Build stage
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /src
+WORKDIR /source
 
-# Copy the main API project file and restore dependencies
-COPY ["src/Api/ToursApp.Api.csproj", "src/Api/"]
-COPY ["src/Application/ToursApp.Application.csproj", "src/Application/"]
-COPY ["src/Infrastructure/ToursApp.Infrastructure.csproj", "src/Infrastructure/"]
+# Copy csproj files preserving the folder structure
+COPY src/Api/ToursApp.Api.csproj src/Api/
+COPY src/Application/ToursApp.Application.csproj src/Application/
+COPY src/Infrastructure/ToursApp.Infrastructure.csproj src/Infrastructure/
 
-# Restore all projects (including referenced ones)
+# Restore dependencies
 RUN dotnet restore "src/Api/ToursApp.Api.csproj"
 
 # Copy all source code
-COPY . .
+COPY src/ src/
 
-# Build and publish the API project
-WORKDIR "/src/src/Api"
-RUN dotnet publish "ToursApp.Api.csproj" -c Release -o /app/publish
+# Build and publish
+RUN dotnet publish "src/Api/ToursApp.Api.csproj" -c Release -o /app/publish --no-restore
 
 # Runtime stage
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
