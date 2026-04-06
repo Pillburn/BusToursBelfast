@@ -1,15 +1,12 @@
-using Microsoft.Extensions.DependencyInjection;
 using AspNetCoreRateLimit;
 using ToursApp.Application.Common.Mappings;
 using ToursApp.Application.Tours.Queries;
 using ToursApp.Application;
-using ToursApp.Domain.Entities;
 using ToursApp.Domain.Interfaces;
 using ToursApp.Infrastructure;
 using ToursApp.Infrastructure.Services;
 using ToursApp.Application.Common.Interfaces;
 using ToursApp.Infrastructure.Repositories;
-using ToursApp.Infrastructure.Services;
 using ToursApp.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);// Create webapp builder
@@ -40,6 +37,11 @@ builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
 builder.Services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();
 
+if (!builder.Environment.IsDevelopment())
+{
+    var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+    builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
+}
 
 var app = builder.Build();
 
@@ -47,6 +49,13 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+}
+else
+{
+    // For production on Render, handle redirection manually if needed.
+    // For now, you can comment it out or conditionally disable it.
+    // app.UseHttpsRedirection();
+    Console.WriteLine("Running in production, HTTPS redirection is disabled.");
 }
 app.UseIpRateLimiting();
 app.UseHttpsRedirection();
