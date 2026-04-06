@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom' // Import BrowserRouter
 import App from './App'
 import './index.css'
-import { StoreProvider } from '../../Api/stores/StoreContext';
+import { StoreProvider } from '../../Presentation/lib/stores/storeContext';
 import { Tours } from "./../feature/tours/dashboard/Tours";
 
 
