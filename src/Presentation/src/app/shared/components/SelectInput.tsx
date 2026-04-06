@@ -1,7 +1,9 @@
 /**imports */
 import { FormControl, FormHelperText, InputLabel, MenuItem } from "@mui/material";
-import Select, { SelectProps } from "@mui/material/Select/";
-import { FieldValues, useController, UseControllerProps } from "react-hook-form";
+import Select from "@mui/material/Select/";
+import type { SelectProps } from "@mui/material/Select/"
+import { useController } from "react-hook-form";
+import type {FieldValues , UseControllerProps} from "react-hook-form";
 
 /**type/interface declarations */
 type Props<T extends FieldValues> ={
