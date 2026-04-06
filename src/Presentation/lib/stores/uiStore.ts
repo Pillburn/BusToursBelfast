@@ -15,3 +15,5 @@ export class UiStore{
         this.isLoading = false;
     }
 }
+
+export const uiStore = new UiStore();

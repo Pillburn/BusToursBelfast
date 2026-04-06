@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { StoreContext } from "../../../Api/stores/StoreContext";
+import { StoreContext } from "../../../Presentation/lib/stores/storeContext";
 
 export function useStore() {
 
