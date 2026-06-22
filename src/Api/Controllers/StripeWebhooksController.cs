@@ -25,15 +25,21 @@ public class StripeWebhookController : ControllerBase
         // Read raw JSON from request body (Stripe sends raw JSON)
         using var reader = new StreamReader(HttpContext.Request.Body);
         var json = await reader.ReadToEndAsync();
-        
+
         // Get Stripe signature from headers for verification
-        var stripeSignature = Request.Headers["Stripe-Signature"];
+        var stripeSignature = Request.Headers["Stripe-Signature"].FirstOrDefault();
+
+        if (string.IsNullOrEmpty(stripeSignature))
+        {
+            _logger.LogWarning("Stripe signature is missing or empty");
+            return BadRequest("Missing Stripe signature");
+        }
 
         try
         {
             // Process webhook through your service
             var result = await _webhookService.ProcessWebhookAsync(json, stripeSignature);
-            
+
             // Return 200 OK if successful, 400 Bad Request if failed
             return result ? Ok() : BadRequest();
         }

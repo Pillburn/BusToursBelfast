@@ -8,5 +8,6 @@ public enum PaymentStatus
     Failed,
     PartiallyRefunded,
     FullyRefunded,
-    Disputed
+    Disputed,
+    Refunded
 }

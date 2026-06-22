@@ -8,7 +8,7 @@ namespace ToursApp.Domain.Common;
 
 public abstract class BaseEntity : AuditableEntity, IHasDomainEvents
 {
-    public Guid Id { get; protected set; } = Guid.NewGuid();
+    public Guid Id { get; set; } = Guid.NewGuid();
     private readonly List<DomainEvent> _domainEvents = new();
     protected BaseEntity(string createdBy)
     {

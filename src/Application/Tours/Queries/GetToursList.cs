@@ -1,8 +1,9 @@
 // src/Application/Tours/Queries/GetToursList.cs
 using ToursApp.Application.Tours.DTOs;
 using ToursApp.Domain.Interfaces;
+using ToursApp.Application.Mappers;
 using MediatR;                   // For IRequest and IRequestHandler
-using AutoMapper;
+
 namespace ToursApp.Application.Tours.Queries;
 
 public record GetToursQuery(bool IncludeInactive = false) 
@@ -12,12 +13,10 @@ public record GetToursQuery(bool IncludeInactive = false)
 public class GetToursQueryHandler : IRequestHandler<GetToursQuery, IEnumerable<TourDto>>
 {
     private readonly ITourRepository _repository;
-    private readonly IMapper _mapper;
 
-    public GetToursQueryHandler(ITourRepository repository, IMapper mapper)
+    public GetToursQueryHandler(ITourRepository repository)
     {
         _repository = repository;
-        _mapper = mapper;
     }
 
     public async Task<IEnumerable<TourDto>> Handle(
@@ -25,6 +24,6 @@ public class GetToursQueryHandler : IRequestHandler<GetToursQuery, IEnumerable<T
         CancellationToken cancellationToken)
     {
         var tours = await _repository.GetAllToursAsync(request.IncludeInactive);
-        return _mapper.Map<IEnumerable<TourDto>>(tours);
+        return TourMapper.ToDtos(tours.ToList());
     }
 }

@@ -10,7 +10,7 @@ public class TourConfiguration : IEntityTypeConfiguration<Tour>
     {
         builder.HasKey(t => t.Id);
 
-        builder.Property(t => t.Name)
+        builder.Property(t => t.Title)
             .HasMaxLength(100)
             .IsRequired();
 

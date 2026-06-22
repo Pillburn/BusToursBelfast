@@ -1,5 +1,6 @@
 using MediatR;
 using ToursApp.Application.Common.Interfaces;
+using ToursApp.Application.DTOs.Payment;
 using ToursApp.Domain.Entities; // Add this namespace
 using ToursApp.Domain.Enums;
 using ToursApp.Domain.Interfaces;   // Add for PaymentIntentStatus if needed

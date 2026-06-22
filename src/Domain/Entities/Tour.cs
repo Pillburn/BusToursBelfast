@@ -3,22 +3,24 @@
 
 public class Tour
 {
-    public Guid Id { get; private set; }
-    public string Name { get; private set; }
-    public string Description { get; private set; }
+    public Guid Id { get; set; }
+    public string Title { get; set; } = string.Empty;
+    public DateTime Date { get; set; }
+    public string Description { get; private set; } = string.Empty;
     public decimal Price { get; private set; }
     public int GroupSize { get; private set; }
+    public string Location { get; set; } = string.Empty;
     public DateTime BookingDate { get; private set; }
     public DateTime TourDate { get; init; } 
-    public bool IsActive { get; private set; } = true;
-
+    public bool IsActive { get; set; } = true;
+    public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
     // Private constructor for EF Core
-    private Tour() { }
+    public Tour() { }
 
     public Tour(string name, string description, decimal price, int groupSize, DateTime tourDate)
     {
         Id = Guid.NewGuid();
-        Name = name;
+        Title = name;
         Description = description;
         Price = price;
         GroupSize = groupSize;
@@ -26,9 +28,10 @@ public class Tour
         Validate();
     }
 
+
     public void Update(string name, string description, decimal price)
     {
-        Name = name;
+        Title = name;
         Description = description;
         Price = price;
         Validate();
@@ -39,7 +42,7 @@ public class Tour
 
     private void Validate()
     {
-        if (string.IsNullOrWhiteSpace(Name))
+        if (string.IsNullOrWhiteSpace(Title))
             throw new ArgumentException("Tour name cannot be empty");
         
         if (Price <= 0)

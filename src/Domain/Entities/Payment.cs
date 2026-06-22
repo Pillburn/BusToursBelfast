@@ -10,7 +10,7 @@ public class Payment : BaseEntity
     public required string PaymentIntentId { get; set; } // Stripe PaymentIntent ID
     public decimal Amount { get; set; } // Original payment amount
     public decimal AmountRefunded { get; set; } = 0; // Tracks total refunded amount
-    public string Currency { get; set; }
+    public string Currency { get; set; } = string.Empty;
 
     public Charge? Charge { get; set; }
     public PaymentStatus Status { get; set; } // Using enum instead of string
@@ -21,6 +21,7 @@ public class Payment : BaseEntity
     public DateTime? PaidAt { get; set; }
     public DateTime? FailedAt { get; set; }
     public PaymentIntent? PaymentIntent { get; set; }
+    public string ErrorMessage{get;set;} = string.Empty;
 
     // Navigation properties (if using EF Core relationships)
     public Guid? BookingId { get; set; }

@@ -3,6 +3,8 @@ using Microsoft.Extensions.Logging;
 using ToursApp.Domain.Interfaces;
 using ToursApp.Domain.Entities;
 using ToursApp.Application.Common.Interfaces;
+using ToursApp.Domain.Enums;
+using ToursApp.Application.Payments.Notifications;
 public class UpdateBookingPaymentStatusHandler
     : INotificationHandler<PaymentSucceededNotification>
 {
@@ -15,7 +17,7 @@ public class UpdateBookingPaymentStatusHandler
         IBookingRepository bookingRepository,
         IPaymentRepository paymentRepository,
         ILogger<UpdateBookingPaymentStatusHandler> logger,
-        IUnitOfWork unitOfWork = null)
+        IUnitOfWork unitOfWork)
     {
         _bookingRepository = bookingRepository ?? throw new ArgumentNullException(nameof(bookingRepository));
         _paymentRepository = paymentRepository ?? throw new ArgumentNullException(nameof(paymentRepository));
@@ -31,7 +33,7 @@ public class UpdateBookingPaymentStatusHandler
         {
             // 1. Get booking
             var booking = await _bookingRepository
-                .GetByPaymentIntentIdAsync(notification.PaymentIntentId, cancellationToken);
+                .GetBookingByPaymentIntentIdAsync(notification.PaymentIntentId, cancellationToken);
 
             if (booking == null)
             {
@@ -48,8 +50,9 @@ public class UpdateBookingPaymentStatusHandler
             {
                 PaymentIntentId = notification.PaymentIntentId,
                 ChargeId = notification.ChargeId,
-                BookingId = booking?.Id,
-                PaidAt = DateTime.UtcNow
+                BookingId = booking.Id,
+                PaidAt = DateTime.UtcNow,
+                Status = PaymentStatus.Succeeded
             };
 
             payment.MarkAsPaid(notification.ChargeId);
@@ -57,9 +60,10 @@ public class UpdateBookingPaymentStatusHandler
             await _paymentRepository.AddPaymentAsync(payment, cancellationToken);
 
             // 3. Update booking status
-            // BOOKING STATUS UPDATE - add this simple method to Booking.cs
+            // BOOKING STATUS UPDATE
             booking.Status = BookingStatus.Confirmed; // Direct status update
-
+            booking.ModifiedBy = "payment_webhook";
+            booking.ModifiedDate = DateTime.UtcNow;
 
             // 4. Save changes
             if (_unitOfWork != null)

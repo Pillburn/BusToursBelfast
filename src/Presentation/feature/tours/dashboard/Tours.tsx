@@ -1,6 +1,9 @@
 import { Grid, Container, Typography } from '@mui/material';
 import type { Tour } from '../../../src/types/tour';
 import { TourCard } from './TourCard';
+import { useBookNow } from '../../../lib/hooks/useBookNow'
+import { BookTourForm} from '../../tour/form/BookTourForm'
+import { useState } from 'react';
 
 const sampleTours: Tour[] = [
   {
@@ -25,18 +28,40 @@ const sampleTours: Tour[] = [
   }
 ];
 
-interface ToursProps {
-  tours?: Tour[];
-  onBookTour?: (tourId: string) => void;
-}
+export const Tours = ({ tours = sampleTours }: {tours?: Tour[] }) => {
+  const [selectedTour, setSelectedTour] = useState<Tour | null>(null);
 
-export const Tours = ({ tours = sampleTours, onBookTour }: ToursProps) => {
+  const {
+    isOpen,
+    isLoading:isBookingLoading,
+    bookingStatus,
+    error,
+    openModal,
+    closeModal,
+    handleBookingSubmit
+  } = useBookNow({
+    tourId:selectedTour?.id ||'',
+    tourName: selectedTour?.title || '',
+    tourPrice: selectedTour?.price || 0,
+    onSuccess: (data: unknown) => {
+      console.log('Booking Successful:', data);
+    },
+    onError: (error: unknown) => {
+      console.error('Booking failed:', error)
+    }
+  });
+
   const handleBookNow = (tourId: string) => {
-    console.log('Booking Tour:', tourId);
-    onBookTour?.(tourId);
+    console.log('Tours: Booking Tour:', tourId);
+    const tour = tours.find(t => t.id === tourId);
+    if (tour){
+      setSelectedTour(tour);
+      openModal()
+    }
   };
 
   return (
+    <>
     <Container 
       maxWidth="lg" 
       disableGutters // removes default horizontal padding
@@ -72,6 +97,18 @@ export const Tours = ({ tours = sampleTours, onBookTour }: ToursProps) => {
         ))}
       </Grid>
     </Container>
+
+    <BookTourForm
+        open={isOpen}
+        tourName={selectedTour?.title || ''}
+        tourPrice={selectedTour?.price || 0}
+        isLoading={isBookingLoading}
+        onSubmit={handleBookingSubmit}
+        onClose={closeModal}
+        bookingStatus={bookingStatus}
+        error={error}
+      />
+    </>
   );
 };
 

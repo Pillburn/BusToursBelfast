@@ -4,5 +4,7 @@ public enum PaymentEventType
     PaymentSucceeded,
     PaymentFailed,
     ChargeRefunded,
-    PaymentCanceled
+    PaymentCanceled,
+    PaymentIntentCreated,
+    ChargeSucceeded
 }

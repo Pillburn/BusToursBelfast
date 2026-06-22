@@ -1,5 +1,4 @@
 using AspNetCoreRateLimit;
-using ToursApp.Application.Common.Mappings;
 using ToursApp.Application.Tours.Queries;
 using ToursApp.Application;
 using ToursApp.Domain.Interfaces;
@@ -8,6 +7,8 @@ using ToursApp.Infrastructure.Services;
 using ToursApp.Application.Common.Interfaces;
 using ToursApp.Infrastructure.Repositories;
 using ToursApp.Infrastructure.Persistence;
+
+using ToursApp.API.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);// Create webapp builder
 
@@ -21,14 +22,16 @@ builder.Services.AddApplicationServices();
 
 builder.Services.AddMediatR(cfg => 
     cfg.RegisterServicesFromAssembly(typeof(GetToursQuery).Assembly));
-builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 builder.Services.AddOpenApi();
 var configuration = builder.Configuration;
 builder.Services.Configure<IpRateLimitOptions>(builder.Configuration.GetSection("IpRateLimiting"));
 builder.Services.Configure<StripeSettings>(configuration.GetSection("StripeSettings"));
 builder.Services.AddInMemoryRateLimiting();
 builder.Services.AddScoped<IApplicationDbContext, AppDbContext>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IStripeGate, StripeGateway>();
+builder.Services.AddScoped<IStripeEventMapper, StripeEventMapper>();
+builder.Services.AddScoped<IPaymentWebhookService, PaymentWebhookService>();
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 builder.Services.AddScoped<IStripePaymentService, StripePaymentService>();
 builder.Services.AddScoped<IBookingRepository, BookingRepo>();
@@ -60,8 +63,9 @@ else
 app.UseIpRateLimiting();
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
-
+//app.UseAuthorization();
+app.MapTourEndpoints();
+app.MapBookingEndpoints();
 app.MapControllers();
 app.Run();
 

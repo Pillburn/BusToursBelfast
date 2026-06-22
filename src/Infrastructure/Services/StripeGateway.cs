@@ -20,15 +20,16 @@ public class StripeGateway : IStripeGate
         StripeConfiguration.ApiKey = _stripeSettings.SecretKey;
     }
 
-    public async Task<Event> ConstructEventAsync(string json, string stripeSignature)
+    public Task<Event> ConstructEventAsync(string json, string stripeSignature)
     {
         try
         {
-            return EventUtility.ConstructEvent(
+            var stripeEvent = EventUtility.ConstructEvent(
                 json,
                 stripeSignature,
                 _stripeSettings.WebhookSecret
             );
+            return Task.FromResult(stripeEvent);
         }
         catch (StripeException ex)
         {

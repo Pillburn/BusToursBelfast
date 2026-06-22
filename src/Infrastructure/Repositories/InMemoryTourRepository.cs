@@ -60,9 +60,19 @@ public class InMemoryTourRepository : ITourRepository
     }
     
     public Task<List<Tour>> GetAllToursAsync()
-{
-    // Simply return a copy of the _tours list to avoid external modifications
-    // to the internal list
-    return Task.FromResult(_tours.ToList());
-}
+    {
+        // Simply return a copy of the _tours list to avoid external modifications
+        // to the internal list
+        return Task.FromResult(_tours.ToList());
+    }
+
+    public async Task<bool> TourExistsAsync(Guid id)
+    {
+        return await Task.FromResult(_tours.Any(t => t.Id == id));
+    }
+
+    public async Task<bool> TourExistsByNameAsync(string name)
+    {
+        return await Task.FromResult(_tours.Any(t => t.Title == name));
+    }
 }

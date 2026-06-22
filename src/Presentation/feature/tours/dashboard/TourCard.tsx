@@ -21,10 +21,19 @@ import {
 } from '@mui/icons-material';
 import type {  TourCardProps } from '../../../src/types/tour';
 
-// ✅ Fixed the syntax - ) instead of }
+
+
 export const TourCard = ({ tour, onBookNow }: TourCardProps) => {
   const handleBookNow = () => {
-    onBookNow?.(tour.id);
+    console.log('🔵 TourCard: Button clicked for tour:', tour.id);
+    
+    // ✅ Add this check
+    if (onBookNow) {
+      console.log('🟢 TourCard: Calling onBookNow with:', tour.id);
+      onBookNow(tour.id);
+    } else {
+      console.log('🔴 TourCard: onBookNow is undefined!');
+    }
   };
 
   const formatPrice = (price: number) => {
@@ -141,6 +150,7 @@ export const TourCard = ({ tour, onBookNow }: TourCardProps) => {
         <Button
           variant="contained"
           size="large"
+          fullWidth
           endIcon={<LocalActivity />}
           onClick={handleBookNow}
           sx={{ 

@@ -80,3 +80,4 @@ dist/
 build/
 node_modules/
 *.min.js
+src/fix-automapper.sh

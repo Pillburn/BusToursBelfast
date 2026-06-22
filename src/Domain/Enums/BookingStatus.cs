@@ -1,8 +1,12 @@
-public enum BookingStatus
+namespace ToursApp.Domain.Enums
 {
-    Pending,
-    Confirmed,
-    Cancelled,
-    Refunded,
-    Failed
+    public enum BookingStatus
+{
+    Pending = 0,
+    Confirmed = 1,
+    Completed = 2,
+    Cancelled = 3,
+    Refunded = 4,
+    Failed = 5 
+}
 }

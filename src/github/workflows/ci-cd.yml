@@ -1,0 +1,57 @@
+name: Build and Test Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  # Job 1: Build and test the .NET 8.0 Backend
+  backend-build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET 8.0
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Restore Dependencies
+      run: dotnet restore
+
+    - name: Compile Backend
+      run: dotnet build --no-restore --configuration Release
+
+    - name: Run Backend Tests
+      run: dotnet test --no-build --configuration Release
+
+  # Job 2: Build and test the React TypeScript Frontend
+  frontend-build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20' # Current stable LTS version
+
+    - name: Install Frontend Dependencies
+      run: |
+        cd frontend-folder # Change this to your actual frontend directory name
+        npm ci
+
+    - name: Run Linting & Type Checking
+      run: |
+        cd frontend-folder
+        npm run lint || true # Optional step
+        npx tsc --noEmit     # Compiles TS without generating files to catch type errors
+
+    - name: Compile React Production Build
+      run: |
+        cd frontend-folder
+        npm run build

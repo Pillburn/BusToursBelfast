@@ -24,7 +24,7 @@ public class BookingConfiguration : IEntityTypeConfiguration<Booking>
                .HasMaxLength(100)
                .IsRequired();
 
-        builder.Property(b => b.CustomerEmail)
+        builder.Property(b => b.Email)
                .HasMaxLength(100)
                .IsRequired();
 
@@ -50,7 +50,7 @@ public class BookingConfiguration : IEntityTypeConfiguration<Booking>
                .OnDelete(DeleteBehavior.Restrict); // Prevents cascade delete
 
         // Indexes
-        builder.HasIndex(b => b.CustomerEmail);
+        builder.HasIndex(b => b.Email);
         builder.HasIndex(b => b.BookingDate);
         builder.HasIndex(b => b.TourId);
 
