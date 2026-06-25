@@ -82,5 +82,9 @@ node_modules/
 *.min.js
 src/fix-automapper.sh
 src/Api/appsettings.Development.json
-src/Api/appsettings.Development.json
-src/Api/appsettings.Development.json
+# .gitignore
+**/appsettings.Development.json
+**/appsettings.Development.local.json
+**/appsettings.*.json
+!appsettings.json
+!appsettings.Production.json
