@@ -39,3 +39,19 @@ export interface BookingResponse {
   email: string;
   bookingDate: string;
 }
+
+// types/booking.ts
+export interface BookingConfirmation {
+  id: string;
+  bookingId: string;
+  referenceNumber: string;
+  tourName: string;
+  preferredDate: string;
+  totalParticipants: number;
+  totalPrice: number;
+  status: string;
+  customerName: string;
+  email: string;
+  phoneNumber: string;
+  createdAt: string;
+}
