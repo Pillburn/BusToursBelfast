@@ -6,7 +6,7 @@ export interface ParticipantCount {
 }
 
 export interface BookingFormData {
-  fullName: string;
+  customerName: string;
   email: string;
   phoneNumber: string;
   numberOfParticipants: ParticipantCount;

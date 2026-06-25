@@ -36,25 +36,36 @@ namespace ToursApp.Application.Bookings.Commands.CreateBooking
         {
             try
             {
+                _logger.LogInformation("Starting booking creation for tour: {TourId}", request.TourId);
+                _logger.LogInformation("1. Validating tour exists...");
                 // 1. Validate tour exists
-                var tour = await _tourRepository.GetTourByIdAsync(request.TourId);
+                if (!Guid.TryParse(request.TourId.ToString(), out var tourGuid))
+                {
+                    _logger.LogWarning("❌ Invalid TourId format: {TourId}", request.TourId);
+                    throw new ArgumentException($"Invalid TourId format: {request.TourId}");
+                }
+                var tour = await _tourRepository.GetTourByIdAsync(tourGuid);
                 if (tour == null)
                 {
+                    _logger.LogWarning("Tour not found: {TourId}", request.TourId);
                     throw new NotFoundException($"Tour with ID {request.TourId} not found");
                 }
+                _logger.LogInformation("✅ Tour found: {TourName}", tour.Title);
 
                 // 2. Calculate totals
+                _logger.LogInformation("2. Calculating totals...");
                 var totalParticipants = request.NumberOfParticipants.Adults + 
                                         request.NumberOfParticipants.Children + 
                                         request.NumberOfParticipants.Infants;
                 
                 var totalAmount = request.TourPrice * (request.NumberOfParticipants.Adults + 
                                                         request.NumberOfParticipants.Children);
-
+                _logger.LogInformation("✅ Total: {TotalParticipants} participants, {TotalAmount} amount",totalParticipants,totalAmount); 
                 // 3. Create booking (Status: Pending)
+                _logger.LogInformation("3. Creating booking...");
                 var booking = new Booking(request.CustomerName)
                 {
-                    TourId = request.TourId,
+                    TourId = Guid.Parse(request.TourId),
                     TourName = request.TourName,
                     TourPrice = request.TourPrice,
                     CustomerName = request.CustomerName,
@@ -78,11 +89,13 @@ namespace ToursApp.Application.Bookings.Commands.CreateBooking
 
                 await _bookingRepository.CreateBookingAsync(booking);
                 await _unitOfWork.SaveChangesAsync(cancellationToken);
+                _logger.LogInformation("✅ Booking created: {BookingId}", booking.Id);
 
                 _logger.LogInformation("Booking created with ID: {BookingId}, Reference: {Reference}", 
                     booking.Id, booking.ReferenceNumber);
 
                 // 4. Create Stripe Payment Intent
+                _logger.LogInformation("4️⃣ Creating Stripe Payment Intent...");
                 var paymentIntentResult = await _paymentGateway.CreatePaymentIntentAsync(
                     amount: totalAmount,
                     currency: "GBP",
@@ -95,12 +108,31 @@ namespace ToursApp.Application.Bookings.Commands.CreateBooking
                     },
                     cancellationToken: cancellationToken
                 );
+                _logger.LogInformation("Payment intent result: Success={Success}, PaymentIntentId={PaymentIntentId}, ClientSecret={ClientSecret}",
+                    paymentIntentResult.Success,
+                    paymentIntentResult.PaymentIntentId ?? "NULL",
+                    paymentIntentResult.ClientSecret ?? "NULL");
+
+                if (!paymentIntentResult.Success)
+                {
+                    _logger.LogError("❌ Payment intent creation failed: {ErrorMessage}", paymentIntentResult.ErrorMessage);
+                    throw new Exception(paymentIntentResult.ErrorMessage ?? "Payment creation failed");
+                }
+
+                // ✅ Check if ClientSecret is null
+                if (string.IsNullOrEmpty(paymentIntentResult.ClientSecret))
+                {
+                    _logger.LogError("❌ ClientSecret is null or empty!");
+                    throw new Exception("Payment intent client secret is missing");
+                }
 
                 // 5. Update booking with payment intent ID
-                booking.PaymentIntentId = paymentIntentResult.PaymentIntentId;
+                _logger.LogInformation("5️⃣ Updating booking with payment intent...");
+                booking.PaymentIntentId = paymentIntentResult.PaymentIntentId ?? string.Empty;
                 await _bookingRepository.UpdateBookingAsync(booking);
                 await _unitOfWork.SaveChangesAsync(cancellationToken);
-
+                _logger.LogInformation("✅ Booking updated with payment intent");
+                _logger.LogInformation("🔑 Returning ClientSecret: {ClientSecret}", paymentIntentResult.ClientSecret);
                 // 6. Return result
                 return new BookingPaymentResultDto
                 {
@@ -108,11 +140,12 @@ namespace ToursApp.Application.Bookings.Commands.CreateBooking
                     Message = "Booking created. Please complete payment.",
                     BookingId = booking.Id,
                     ReferenceNumber = booking.ReferenceNumber,
-                    ClientSecret = paymentIntentResult.ClientSecret,
-                    PaymentIntentId = paymentIntentResult.PaymentIntentId,
+                    ClientSecret = paymentIntentResult.ClientSecret ?? "null",
+                    PaymentIntentId = paymentIntentResult.PaymentIntentId ?? "null",
                     TotalAmount = totalAmount,
                     Currency = "GBP",
-                    RequiresPaymentMethod = true
+                    RequiresPaymentMethod = true,
+                    Status = 1
                 };
             }
             catch (Exception ex)

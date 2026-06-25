@@ -1,11 +1,25 @@
 // lib/hooks/useBookNow.ts
 import { useState, useCallback } from 'react';
-import type {BookingFormData, BookingApiRequest } from '../types/booking';
+import type {BookingFormData } from '../types/booking';
 import { loadStripe  } from '@stripe/stripe-js';
 
 //Initialise Stripe outside component
 // Use import.meta.env for Vite
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY!);
+const getStripeKey = (): string => {
+  const  key = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
+  if(!key)
+    {
+      console.warn('Stripe publishable key is missing. Using test key.')
+      return 'pk_test_1234567890';
+    }
+
+    return key;
+};
+
+const stripePromise = loadStripe(getStripeKey()).catch(error => {
+  console.error('Failed to load stripe:', error);
+  return null;
+})
 
 interface UseBookNowProps {
   tourId: string;
@@ -48,11 +62,11 @@ export const useBookNow = ({
 
     try {
       // Prepare the data for API - don't spread formData directly
-      const apiRequest: BookingApiRequest = {
+      const apiRequest = {
         tourId,
         tourName,
         tourPrice,
-        fullName: formData.fullName,
+        customerName: formData.customerName,
         email: formData.email,
         phoneNumber: formData.phoneNumber,
         numberOfParticipants: {
@@ -70,7 +84,7 @@ export const useBookNow = ({
         bookingDate: new Date().toISOString(),
         status: 'pending'
       };
-
+      console.log('📤 Sending booking request:', apiRequest);
       // Your API endpoint - update to match your backend
       const response = await fetch('/api/tour/bookings', {
         method: 'POST',
@@ -78,15 +92,30 @@ export const useBookNow = ({
         body: JSON.stringify(apiRequest),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Booking failed. Please try again.');
-      }
-
+      console.log('📥 Response status:', response.status);
       const result = await response.json();
+      console.log('📦 Full response from backend:', result);
+      console.log('🔑 ClientSecret:', result.clientSecret);
+      console.log('📋 BookingId:', result.bookingId);
+
+      if (!response.ok) 
+        {
+        // If response is not JSON, get text
+          const errorMessage = result?.message || result?.title || result?.error || 'Booking failed';
+          console.error('❌ Backend error text:', errorMessage);
+          throw new Error(errorMessage);
+        }
+      
+      if (!result.clientSecret) 
+      {
+        console.error('❌ No clientSecret in response!');
+        console.error('Response:', JSON.stringify(result, null, 2));
+        throw new Error('Payment initialization failed - no client secret');
+      }
        // 2. Confirm payment with Stripe
       const stripe = await stripePromise;
-      if (!stripe) {
+      if (!stripe)
+      {
         throw new Error('Stripe failed to initialize. Please check your publishable key.');
       }
 

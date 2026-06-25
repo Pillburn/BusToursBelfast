@@ -4,7 +4,7 @@ using ToursApp.Domain.Enums;
 
 public class CreateBookingRequest
 {
-    public Guid TourId { get; set; }
+    public string TourId { get; set; } = string.Empty;
     public string TourName { get; set; } = string.Empty;
     public decimal TourPrice { get; set; }
     public string CustomerName { get; set; } = string.Empty;
@@ -24,7 +24,7 @@ public class CreateBookingRequest
         return new Booking
         {
             Id = Guid.NewGuid(),
-            TourId = request.TourId,
+            TourId = Guid.Parse(request.TourId),
             TourName = request.TourName,
             CustomerName = request.CustomerName,
             Email = request.Email,

@@ -12,7 +12,185 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+.MuiAppBar-root {
+  background-color: #1a3c2a !important;
+  background-image: linear-gradient(90deg, #1a3c2a, #2d5a3d) !important;
+  color: #ffffff !important;
+}
 
+.MuiAppBar-root .MuiTypography-root {
+  color: #ffffff !important;
+}
+
+.MuiAppBar-root .MuiButton-root {
+  color: #ffffff !important;
+}
+
+/* DialogTitle - White text on green */
+.MuiDialogTitle-root {
+  background-color: #1a3c2a !important;
+  background-image: linear-gradient(135deg, #1a3c2a, #0f2a1a) !important;
+  color: #ffffff !important;
+}
+
+.MuiDialogTitle-root .MuiTypography-root {
+  color: #ffffff !important;
+}
+
+/* Cards - Dark text on white */
+.MuiCard-root .MuiTypography-root {
+  color: #1a3c2a !important;
+}
+
+.MuiCard-root .MuiTypography-body2 {
+  color: #2d5a3d !important;
+}
+
+/* Override any blue buttons */
+.MuiButton-containedPrimary {
+  background-color: #1a3c2a !important;
+}
+
+.MuiButton-containedPrimary:hover {
+  background-color: #0f2a1a !important;
+}
+.MuiCard-root .MuiButton-contained {
+  background-color: #1a3c2a !important;
+  color: #ffffff !important;
+}
+
+.MuiCard-root .MuiButton-contained:hover {
+  background-color: #0f2a1a !important;
+}
+
+/* BookTourForm - All buttons */
+.MuiDialog-root .MuiButton-contained {
+  background-color: #1a3c2a !important;
+  color: #ffffff !important;
+}
+
+.MuiDialog-root .MuiButton-contained:hover {
+  background-color: #0f2a1a !important;
+}
+
+/* BookTourForm - Step icons (stepper) */
+.MuiStepIcon-root {
+  color: #2d5a3d !important; /* Green instead of blue */
+}
+
+.MuiStepIcon-root.Mui-active {
+  color: #1a3c2a !important;
+}
+
+.MuiStepIcon-root.Mui-completed {
+  color: #1a3c2a !important;
+}
+
+/* BookTourForm - Number picker buttons */
+.MuiIconButton-root .MuiSvgIcon-root {
+  color: #1a3c2a !important;
+}
+
+/* BookTourForm - Chip labels */
+.MuiChip-root {
+  color: #1a3c2a !important;
+}
+
+.MuiChip-root .MuiChip-icon {
+  color: #1a3c2a !important;
+}
+
+/* BookTourForm - Success/Error alerts */
+.MuiAlert-standardSuccess {
+  background-color: #2d5a3d !important;
+  color: #ffffff !important;
+}
+
+.MuiAlert-standardError {
+  background-color: #8b1a1a !important;
+  color: #ffffff !important;
+}
+/* index.css - Force typography colors */
+
+/* Force all text to green */
+* {
+  color: #1a3c2a;
+}
+
+/* But override text that should be white (like in headers) */
+.MuiDialogTitle-root * {
+  color: #ffffff !important;
+}
+
+/* Force Typography component */
+.MuiTypography-root {
+  color: #1a3c2a !important;
+}
+
+.MuiTypography-body2 {
+  color: #2d5a3d !important;
+}
+
+.MuiTypography-h1, .MuiTypography-h2, .MuiTypography-h3,
+.MuiTypography-h4, .MuiTypography-h5, .MuiTypography-h6 {
+  color: #1a3c2a !important;
+}
+
+/* Dialog title text should be white */
+.MuiDialogTitle-root {
+  background-color: #1a3c2a !important;
+  background-image: linear-gradient(135deg, #1a3c2a, #0f2a1a) !important;
+  color: #ffffff !important;
+}
+
+
+/* Card text */
+.MuiCard-root .MuiTypography-root {
+  color: #1a3c2a !important;
+}
+
+.MuiCard-root .MuiTypography-body2 {
+  color: #2d5a3d !important;
+}
+
+.MuiCard-root .MuiTypography-caption {
+  color: #4a7c5c !important;
+}
+.MuiAppBar-root {
+  background-color: #1a3c2a !important;
+  background-image: linear-gradient(90deg, #1a3c2a, #2d5a3d) !important;
+  color: #ffffff !important;
+}
+
+.MuiAppBar-root .MuiTypography-root {
+  color: #ffffff !important;
+}
+
+.MuiAppBar-root .MuiButton-root {
+  color: #ffffff !important;
+}
+
+.MuiAppBar-root .MuiIconButton-root {
+  color: #ffffff !important;
+}
+
+/* Drawer items - Force white */
+.MuiDrawer-root .MuiListItemText-primary {
+  color: #ffffff !important;
+}
+
+/* HomePage - Force white text on dark background */
+.MuiPaper-root .MuiTypography-h1 {
+  color: #ffffff !important;
+}
+
+.MuiPaper-root .MuiTypography-h5 {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+/* Price text */
+.MuiCard-root .MuiTypography-h6 {
+  color: #1a3c2a !important;
+}
 a {
   font-weight: 500;
   color: #646cff;
@@ -66,3 +244,5 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+

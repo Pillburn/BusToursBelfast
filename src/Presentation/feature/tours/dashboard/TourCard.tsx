@@ -1,167 +1,144 @@
-import {
-  Card,
-  CardContent,
-  CardMedia,
-  Typography,
-  Button,
-  Box,
-  Chip,
-  Divider,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Rating
-} from '@mui/material';
-import {
-  LocationOn,
-  AccessTime,
-  CheckCircle,
-  LocalActivity
-} from '@mui/icons-material';
-import type {  TourCardProps } from '../../../src/types/tour';
+// components/tour/TourCard.tsx
+import { Card, CardContent, CardMedia, Typography, Button, Box, Chip, useTheme } from "@mui/material";
+import { LocalActivity } from "@mui/icons-material";
 
+interface Tour {
+  id: string;
+  title: string;
+  description: string;
+  price: number;
+  imageUrl?: string;
+  duration?: string;
+  rating?: number;
+  includes?: string[];
+}
 
+interface TourCardProps {
+  tour: Tour;
+  onBookNow?: (tourId: string) => void;
+}
 
 export const TourCard = ({ tour, onBookNow }: TourCardProps) => {
-  const handleBookNow = () => {
-    console.log('🔵 TourCard: Button clicked for tour:', tour.id);
-    
-    // ✅ Add this check
-    if (onBookNow) {
-      console.log('🟢 TourCard: Calling onBookNow with:', tour.id);
-      onBookNow(tour.id);
-    } else {
-      console.log('🔴 TourCard: onBookNow is undefined!');
-    }
-  };
-
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-GB', {
-      style: 'currency',
-      currency: 'GBP'
-    }).format(price);
-  };
+  const theme = useTheme();  // ← Use theme hook
 
   return (
-    <Card 
-      sx={{ 
-        maxWidth: 400, 
-        height: '100%', 
-        display: 'flex', 
-        flexDirection: 'column',
-        borderRadius: 2,
-        boxShadow: 3,
-        transition: 'transform 0.3s, box-shadow 0.3s',
-        '&:hover': {
-          transform: 'translateY(-4px)',
-          boxShadow: 6
-        }
-      }}
-    >
-      <CardMedia
-        component="img"
-        height="220"
-        image={tour.imageUrl}
-        alt={tour.title}
-      />
-      
-      <Box sx={{ position: 'absolute', top: 16, right: 16 }}>
-        <Chip
-          icon={<LocationOn />}
-          label="Belfast, NI"
-          size="small"
-          sx={{ 
-            backgroundColor: 'primary.main', 
-            color: 'white', 
-            fontWeight: 'bold',
-            mb: 1
-          }}
+    <Card sx={{ 
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      border: `1px solid ${theme.palette.primary.light}20`, 
+      borderRadius: theme.spacing(2),  // Returns '16px' if spacing unit is 8
+      overflow: 'hidden',
+      transition: 'all 0.3s ease',
+      '&:hover': {
+        transform: 'translateY(-8px)',
+        boxShadow: theme.shadows[8],
+      },
+    }}>
+      <Box sx={{ position: 'relative' }}>
+        <CardMedia
+          component="img"
+          height="200"
+          image={tour.imageUrl || '/images/default-tour.jpg'}
+          alt={tour.title}
+          sx={{ objectFit: 'cover' }}
         />
-        <Chip
-          icon={<AccessTime />}
-          label={tour.duration}
-          size="small"
-          sx={{ 
-            backgroundColor: 'secondary.main', 
-            color: 'white', 
-            fontWeight: 'bold',
-            display: 'block'
-          }}
-        />
+        {tour.rating && (
+          <Chip
+            label={`⭐ ${tour.rating}`}
+            size="small"
+            sx={{
+              position: 'absolute',
+              top: 12,
+              right: 12,
+              bgcolor: theme.palette.secondary.main,
+              color: theme.palette.common.white,
+              fontWeight: 600,
+            }}
+          />
+        )}
       </Box>
       
       <CardContent sx={{ flexGrow: 1, p: 3 }}>
-        <Typography variant="h5" component="h2" gutterBottom sx={{ fontWeight: 'bold' }}>
+        <Typography 
+          
+          component="h2" 
+          sx={{ 
+            fontWeight: 700,
+          }}
+        >
           {tour.title}
         </Typography>
         
-        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-          <Rating value={tour.rating} readOnly precision={0.5} size="small" />
-          <Typography variant="body2" color="text.secondary" sx={{ ml: 1 }}>
-            {tour.rating} (128 reviews)
-          </Typography>
-        </Box>
-        
-        <Typography variant="body1" color="text.secondary" paragraph>
+        <Typography 
+          variant="body2" 
+          color="text.secondary" 
+          sx={{ mb: 2, lineHeight: 1.6 }}
+        >
           {tour.description}
         </Typography>
-        
-        {tour.includes && tour.includes.length > 0 && (
-          <Box sx={{ mt: 2 }}>
-            <Typography variant="h6" gutterBottom sx={{ fontSize: '1rem', fontWeight: 'bold' }}>
-              Tour Includes:
-            </Typography>
-            <List dense sx={{ py: 0 }}>
-              {tour.includes.map((item, index) => (
-                <ListItem key={index} sx={{ py: 0, px: 0 }}>
-                  <ListItemIcon sx={{ minWidth: 30 }}>
-                    <CheckCircle color="primary" sx={{ fontSize: 20 }} />
-                  </ListItemIcon>
-                  <ListItemText primary={item} />
-                </ListItem>
-              ))}
-            </List>
-          </Box>
-        )}
-      </CardContent>
-      
-      <Divider />
-      
-      <Box sx={{ 
-        p: 3, 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        alignItems: 'center',
-        backgroundColor: 'grey.50'
-      }}>
-        <Box>
-          <Typography variant="body2" color="text.secondary">
-            From
-          </Typography>
-          <Typography variant="h5" color="primary.main" sx={{ fontWeight: 'bold' }}>
-            {formatPrice(tour.price)}
-          </Typography>
-          <Typography variant="caption" color="text.secondary">
-            per person
-          </Typography>
+
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mb: 2 }}>
+          {tour.includes?.slice(0, 3).map((item, index) => (
+            <Chip
+              key={index}
+              label={item}
+              size="small"
+              sx={{ 
+                bgcolor: theme.palette.primary.light + '20', // 20% opacity
+                color: theme.palette.primary.main,
+                fontSize: '0.7rem',
+              }}
+            />
+          ))}
+          {tour.includes && tour.includes.length > 3 && (
+            <Chip
+              label={`+${tour.includes.length - 3} more`}
+              size="small"
+              sx={{ 
+                bgcolor: 'rgba(0,0,0,0.05)',
+                color: theme.palette.text.secondary,
+                fontSize: '0.7rem',
+              }}
+            />
+          )}
         </Box>
-        
+
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2 }}>
+          <Box>
+            <Typography 
+              sx={{ fontWeight: 700 }}
+            >
+              £{tour.price}
+            </Typography>
+            <Typography variant="caption" color="text.secondary">
+              / person
+            </Typography>
+          </Box>
+          
+          {tour.duration && (
+            <Typography variant="body2" color="text.secondary">
+              🕐 {tour.duration}
+            </Typography>
+          )}
+        </Box>
+
         <Button
           variant="contained"
-          size="large"
           fullWidth
+          size="large"
           endIcon={<LocalActivity />}
-          onClick={handleBookNow}
+          onClick={() => onBookNow?.(tour.id)}
           sx={{ 
-            borderRadius: 2,
-            px: 3,
-            py: 1
+            mt: 2,
+            py: 1.5,
+            borderRadius: theme.shape.borderRadius,
+            fontWeight: 600,
           }}
         >
           Book Now
         </Button>
-      </Box>
+      </CardContent>
     </Card>
   );
 };

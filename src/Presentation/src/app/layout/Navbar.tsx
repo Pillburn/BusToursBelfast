@@ -1,71 +1,116 @@
-import { AppBar, Box, LinearProgress, MenuItem, Toolbar, Typography } from "@mui/material";
-import { useStore } from "../../../lib/hooks/useStore";
-import { useEffect, useState } from "react";
-import { Group } from "@mui/icons-material";
-import { NavLink } from "react-router-dom";
-import MenuItemLink from "../shared/components/MenuItemLink";
+// src/app/layout/Navbar.tsx
+import { AppBar, Toolbar, Typography, Button, Box, useMediaQuery, IconButton, Drawer, List, ListItem, ListItemText } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import MenuIcon from '@mui/icons-material/Menu';
+import { useTheme } from '@mui/material/styles';
 
+const Navbar = () => {
+  const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
-// Navbar.tsx
-export default function Navbar() {
-  const [debouncedIsLoading, setDebouncedIsLoading] = useState(false);
-  const store = useStore();
-
-  // ✅ Get uiStore safely at the top level
-  const uiStore = store?.uiStore;
-  const isLoading = uiStore?.isLoading || false;
-
-  // ✅ useEffect depends on safe variables
-  useEffect(() => {
-    const timer = setTimeout(() => setDebouncedIsLoading(isLoading), 300);
-    return () => clearTimeout(timer);
-  }, [isLoading]);
-
-  // ✅ Early return after all hooks
-  if (!store || !uiStore) {
-    return (
-      <AppBar position="static">
-        <Toolbar>
-          <Typography>Loading...</Typography>
-        </Toolbar>
-      </AppBar>
-    );
-  }
+  const navItems = [
+    { label: 'Tours', path: '/tours' },
+    { label: 'About', path: '/about' },
+    { label: 'Contact', path: '/contact' },
+  ];
 
   return (
-    <Box>
-    <AppBar position="static" sx={{
-        backgroundImage: 'linear-gradient(120deg,rgb(114, 139, 114) 12%, #53a653 30%, #2e662e 60%)',
-        position:'relative'
-      }
-        }>
-     
-      <Toolbar sx={{display:'flex', justifyContent: 'space-between'}}>
-                <Box>
-                    <MenuItem component={NavLink} to='/'>
-                        <Group fontSize="large"/>
-                        <Typography variant="h4" fontWeight='bold'>
-                             Belfast Bus Tours
-                        </Typography>
-                    </MenuItem>
-                </Box>
-                <Box sx={{display:'flex'}}>
-                    <MenuItemLink to='/tours'>
-                    Tours
-                    </MenuItemLink>
-                    <MenuItemLink to='/about'>
-                    Airport Transfers
-                    </MenuItemLink>
-                    <MenuItemLink to='/counter'>
-                    Contact Us
-                    </MenuItemLink>
-                    <MenuItemLink to='/errors'>
-                    Test Errors
-                    </MenuItemLink>
-                </Box>
-        {debouncedIsLoading && <LinearProgress />}
+    <AppBar 
+      position="sticky"
+      sx={{
+        // ✅ Force green colors
+        backgroundColor: theme.palette.primary.main,
+        backgroundImage: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
+        color: theme.palette.common.white,
+        boxShadow: '0 4px 20px rgba(26, 60, 42, 0.15)',
+      }}
+    >
+      <Toolbar sx={{ justifyContent: 'space-between', py: 1 }}>
+        <Typography 
+          variant="h5" 
+          component="div" 
+          sx={{ 
+            fontWeight: 700,
+            cursor: 'pointer',
+            color: theme.palette.common.white,
+            '&:hover': { opacity: 0.8 },
+          }}
+          onClick={() => navigate('/')}
+        >
+          🇮🇪 Béal Feirste Turas
+        </Typography>
+
+        {isMobile ? (
+          <>
+            <IconButton 
+              color="inherit" 
+              onClick={() => setDrawerOpen(true)}
+              sx={{ 
+                color: theme.palette.common.white,
+                '&:hover': { backgroundColor: 'rgba(255,255,255,0.1)' }
+              }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Drawer
+              anchor="right"
+              open={drawerOpen}
+              onClose={() => setDrawerOpen(false)}
+              PaperProps={{
+                sx: {
+                  width: 250,
+                  backgroundColor: theme.palette.primary.main,
+                  color: theme.palette.common.white,
+                }
+              }}
+            >
+              <List sx={{ mt: 4 }}>
+                {navItems.map((item) => (
+                  <ListItem 
+                    key={item.path} 
+                    onClick={() => {
+                      navigate(item.path);
+                      setDrawerOpen(false);
+                    }}
+                    sx={{ 
+                      '&:hover': { 
+                        backgroundColor: 'rgba(255,255,255,0.1)',
+                        borderRadius: 1,
+                      }
+                    }}
+                  >
+                    <ListItemText primary={item.label} />
+                  </ListItem>
+                ))}
+              </List>
+            </Drawer>
+          </>
+        ) : (
+          <Box sx={{ display: 'flex', gap: 2 }}>
+            {navItems.map((item) => (
+              <Button 
+                key={item.path} 
+                color="inherit" 
+                onClick={() => navigate(item.path)}
+                sx={{
+                  color: theme.palette.common.white,
+                  fontWeight: 500,
+                  '&:hover': {
+                    backgroundColor: 'rgba(255,255,255,0.1)',
+                  },
+                }}
+              >
+                {item.label}
+              </Button>
+            ))}
+          </Box>
+        )}
       </Toolbar>
     </AppBar>
-    </Box>
   );
-}
+};
+
+export default Navbar;

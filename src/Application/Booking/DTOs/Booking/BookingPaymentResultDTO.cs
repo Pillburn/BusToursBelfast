@@ -14,5 +14,6 @@ namespace ToursApp.Application.DTOs.Booking
         public string RedirectUrl { get; set; } = string.Empty;
         public bool RequiresPaymentMethod { get; set; }
         public string? ErrorCode { get; set; }
+        public int Status {get; set;} = 0;
     }
 }

@@ -13,7 +13,7 @@ public interface IPaymentRepository
 
     
     // Charge operations
-    Task<Payment> GetByChargeIdAsync(string stripeChargeId);
+    Task<Payment?> GetByChargeIdAsync(string stripeChargeId);
     Task AddChargeAsync(Charge charge);
     
     // General operations

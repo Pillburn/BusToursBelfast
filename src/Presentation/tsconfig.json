@@ -13,6 +13,7 @@
     "noImplicitAny": false,
     "strict": false,
     "skipLibCheck": true ,
-    "noEmitOnError": false
-  } 
+    "noEmitOnError": false,
+    "include": ["src","src/vite-env.d.ts"]
+  }
 }

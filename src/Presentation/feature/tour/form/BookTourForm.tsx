@@ -48,7 +48,7 @@ import { DatePicker } from '@mui/x-date-pickers';
 // Type definitions
 
 interface BookingFormData{
-  fullName: string;
+  customerName: string;
   email: string;
   phoneNumber: string;
   numberOfParticipants: {
@@ -93,7 +93,7 @@ export const BookTourForm: React.FC<BookTourFormProps> = ({
   // State for form fields
 
   const [formData, setFormData] = useState<BookingFormData>({
-    fullName: '',
+    customerName: '',
     email: '',
     phoneNumber: '',
     numberOfParticipants: {
@@ -149,7 +149,7 @@ export const BookTourForm: React.FC<BookTourFormProps> = ({
     const newErrors: Record<string, string> = {};
     
     if (step === 0) {
-      if (!formData.fullName.trim()) newErrors.fullName = 'Full name is required';
+      if (!formData.customerName.trim()) newErrors.customerName = 'Customer name is required';
       if (!formData.email.trim()) newErrors.email = 'Email is required';
       else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email is invalid';
       if (!formData.phoneNumber.trim()) newErrors.phoneNumber = 'Phone number is required';
@@ -179,17 +179,22 @@ export const BookTourForm: React.FC<BookTourFormProps> = ({
     setActiveStep((prev) => prev - 1);
   };
   // Handle form submission
-  const handleSubmit = async(e: React.FormEvent) => {
+  const handleSubmit = async(e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log('📝 BookTourForm: Form submitted!');
+    console.log('📝 BookTourForm: Form data:', formData);
     if (validateStep(activeStep)) {
+      console.log('✅ BookTourForm: Validation passed, calling onSubmit');
       await onSubmit(formData);
+    }else{
+      console.log('❌ BookTourForm: Validation failed');
     }
   };
 
   //Reset the form
   /*const handleClose = () => {
     setFormData({
-      fullName: '',
+      customerName: '',
       email: '',
       phoneNumber: '',
       numberOfParticipants: { adults: 1, children: 0, infants: 0 },
@@ -211,13 +216,13 @@ export const BookTourForm: React.FC<BookTourFormProps> = ({
 
   const totalPrice = totalParticipants * tourPrice;
   const totalInEur = (totalPrice * EXCHANGE_RATE).toFixed(2);
-  
+  console.log('📦 BookTourForm rendering - open:', open, 'tourName:', tourName);
   const getStepContent = (step: number) => {
     switch (step) {
       case 0:
         return (
           <Box>
-            <Typography variant="subtitle1" sx={{ mb: 3, color: 'text.secondary' }}>
+            <Typography variant="subtitle1" sx={{ mb: 3, color: 'theme.palette.text.secondary' }}>
               Tell us who you are so we can prepare your booking
             </Typography>
             <Grid container spacing={3}>
@@ -225,10 +230,10 @@ export const BookTourForm: React.FC<BookTourFormProps> = ({
                 <TextField
                   fullWidth
                   label="Full Name"
-                  value={formData.fullName}
-                  onChange={handleInputChange('fullName')}
-                  error={!!errors.fullName}
-                  helperText={errors.fullName}
+                  value={formData.customerName}
+                  onChange={handleInputChange('customerName')}
+                  error={!!errors.customerName}
+                  helperText={errors.customerName}
                   placeholder="As shown on ID/passport"
                   disabled={isLoading}
                   required
@@ -297,7 +302,7 @@ export const BookTourForm: React.FC<BookTourFormProps> = ({
       case 1:
         return (
           <Box>
-            <Typography variant="subtitle1" sx={{ mb: 3, color: 'text.secondary' }}>
+            <Typography variant="subtitle1" sx={{ mb: 3, color: 'theme.palette.text.secondary' }}>
               Let's plan your perfect tour experience
             </Typography>
             <Grid container spacing={3}>
@@ -369,7 +374,7 @@ export const BookTourForm: React.FC<BookTourFormProps> = ({
                     {(['adults', 'children', 'infants'] as const).map((type) => (
                       <Grid size= {{xs:12, sm:6, md: 4}} key={type}>
                         <Box sx={{ textAlign: 'center' }}>
-                          <Typography variant="body2" color="text.secondary" gutterBottom>
+                          <Typography variant="body2" color="theme.palette.text.secondary" gutterBottom>
                             {type.charAt(0).toUpperCase() + type.slice(1)} 
                             {type === 'adults' ? ' (12+)' : type === 'children' ? ' (3-11)' : ' (0-2)'}
                           </Typography>
@@ -432,7 +437,7 @@ export const BookTourForm: React.FC<BookTourFormProps> = ({
       case 2:
         return (
           <Box>
-            <Typography variant="subtitle1" sx={{ mb: 3, color: 'text.secondary' }}>
+            <Typography variant="subtitle1" sx={{ mb: 3, color: 'theme.palette.text.secondary' }}>
               Help us provide the best experience
             </Typography>
             <Grid container spacing={3}>
@@ -546,7 +551,7 @@ export const BookTourForm: React.FC<BookTourFormProps> = ({
       case 3:
         return (
           <Box>
-            <Typography variant="subtitle1" sx={{ mb: 3, color: 'text.secondary' }}>
+            <Typography variant="subtitle1" sx={{ mb: 3, color: 'theme.palette.text.secondary' }}>
               Review your booking details
             </Typography>
             <Paper 
@@ -565,7 +570,7 @@ export const BookTourForm: React.FC<BookTourFormProps> = ({
                     Personal Information
                   </Typography>
                   <Box sx={{ pl: 2, mb: 2 }}>
-                    <Typography variant="body2"><strong>Name:</strong> {formData.fullName}</Typography>
+                    <Typography variant="body2"><strong>Name:</strong> {formData.customerName}</Typography>
                     <Typography variant="body2"><strong>Email:</strong> {formData.email}</Typography>
                     <Typography variant="body2"><strong>Phone:</strong> {formData.phoneNumber}</Typography>
                   </Box>
@@ -612,22 +617,23 @@ export const BookTourForm: React.FC<BookTourFormProps> = ({
           borderRadius: 4,
           maxHeight: '90vh',
           overflow: 'hidden',
-          bgcolor: 'background.default'
+          bgcolor: 'theme.palette.background.paper'
         }
       }}
     >
       <DialogTitle sx={{ 
         p: 0,
         position: 'relative',
-        background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
-        color: 'white',
+        backgroundColor: theme.palette.primary.main,  // ← Should be green
+        backgroundImage: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
+        color: theme.palette.common.white,
         pt: 3,
         px: 3,
         pb: 2
       }}>
         <Box display="flex" justifyContent="space-between" alignItems="flex-start">
           <Box>
-            <Typography variant="h5" sx={{ fontWeight: 700, mb: 0.5 }}>
+            <Typography  sx={{ fontWeight: 700, mb: 0.5 }}>
               Book Your Tour
             </Typography>
             <Typography variant="body2" sx={{ opacity: 0.9 }}>
@@ -677,7 +683,7 @@ export const BookTourForm: React.FC<BookTourFormProps> = ({
           {bookingStatus === 'loading' && (
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', py: 6 }}>
               <CircularProgress size={60} />
-              <Typography variant="body1" sx={{ mt: 2, color: 'text.secondary' }}>
+              <Typography variant="body1" sx={{ mt: 2, color: 'theme.palette.text.secondary' }}>
                 Processing your booking...
               </Typography>
             </Box>
@@ -701,7 +707,7 @@ export const BookTourForm: React.FC<BookTourFormProps> = ({
               <Typography variant="h5" gutterBottom fontWeight={600}>
                 Booking Confirmed! 🎉
               </Typography>
-              <Typography variant="body1" color="text.secondary">
+              <Typography variant="body1" color="theme.palette.text.secondary">
                 Your tour has been booked successfully. Check your email for confirmation.
               </Typography>
             </Box>
@@ -719,82 +725,79 @@ export const BookTourForm: React.FC<BookTourFormProps> = ({
           {bookingStatus === 'idle' && (
             <form onSubmit={handleSubmit}>
               {getStepContent(activeStep)}
-            </form>
+              <Box sx={{ 
+                p: 3, 
+                borderTop: `1px solid ${theme.palette.divider}`,
+                bgcolor: 'background.paper',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center'
+              }}>
+                <Box>
+                  {activeStep === 0 && (
+                    <Chip 
+                      icon={<LocalActivity />}
+                      label={`${tourName}`}
+                      size="small"
+                      sx={{ mr: 1 }}
+                    />
+                  )}
+                  {activeStep === 1 && (
+                    <Chip 
+                      icon={<People />}
+                      label={`${totalParticipants} participants`}
+                      size="small"
+                      sx={{ mr: 1 }}
+                    />
+                  )}
+                  {activeStep === 3 && (
+                    <Chip 
+                      icon={<Payment />}
+                      label={`£${totalPrice.toFixed(2)}`}
+                      size="small"
+                      color="primary"
+                      sx={{ mr: 1 }}
+                    />
+                  )}
+                </Box>
+                <Box sx={{ display: 'flex', gap: 1 }}>
+                  {activeStep > 0 && (
+                    <Button onClick={handleBack} disabled={isLoading}>
+                      Back
+                    </Button>
+                  )}
+                  {activeStep < steps.length - 1 ? (
+                    <Button 
+                      variant="contained" 
+                      onClick={handleNext}
+                      disabled={isLoading}
+                      sx={{ borderRadius: 2, px: 4 }}
+                    >
+                      Next
+                    </Button>
+                  ) : (
+                    <Button 
+                      type="submit" 
+                      variant="contained" 
+                      disabled={isLoading}
+                      endIcon={<CheckCircle />}
+                      sx={{ 
+                        borderRadius: 2, 
+                        px: 4,
+                        background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
+                        '&:hover': {
+                          background: `linear-gradient(135deg, ${theme.palette.primary.dark}, ${theme.palette.primary.dark})`,
+                        }
+                      }}
+                    >
+                      {isLoading ? 'Processing...' : 'Confirm Booking'}
+                    </Button>
+                  )}
+                </Box>
+              </Box>
+          </form>
           )}
         </Box>
-
-        {bookingStatus === 'idle' && (
-          <Box sx={{ 
-            p: 3, 
-            borderTop: `1px solid ${theme.palette.divider}`,
-            bgcolor: 'background.paper',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center'
-          }}>
-            <Box>
-              {activeStep === 0 && (
-                <Chip 
-                  icon={<LocalActivity />}
-                  label={`${tourName}`}
-                  size="small"
-                  sx={{ mr: 1 }}
-                />
-              )}
-              {activeStep === 1 && (
-                <Chip 
-                  icon={<People />}
-                  label={`${totalParticipants} participants`}
-                  size="small"
-                  sx={{ mr: 1 }}
-                />
-              )}
-              {activeStep === 3 && (
-                <Chip 
-                  icon={<Payment />}
-                  label={`£${totalPrice.toFixed(2)}`}
-                  size="small"
-                  color="primary"
-                  sx={{ mr: 1 }}
-                />
-              )}
-            </Box>
-            <Box sx={{ display: 'flex', gap: 1 }}>
-              {activeStep > 0 && (
-                <Button onClick={handleBack} disabled={isLoading}>
-                  Back
-                </Button>
-              )}
-              {activeStep < steps.length - 1 ? (
-                <Button 
-                  variant="contained" 
-                  onClick={handleNext}
-                  disabled={isLoading}
-                  sx={{ borderRadius: 2, px: 4 }}
-                >
-                  Next
-                </Button>
-              ) : (
-                <Button 
-                  type="submit" 
-                  variant="contained" 
-                  disabled={isLoading}
-                  endIcon={<CheckCircle />}
-                  sx={{ 
-                    borderRadius: 2, 
-                    px: 4,
-                    background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
-                    '&:hover': {
-                      background: `linear-gradient(135deg, ${theme.palette.primary.dark}, ${theme.palette.primary.dark})`,
-                    }
-                  }}
-                >
-                  {isLoading ? 'Processing...' : 'Confirm Booking'}
-                </Button>
-              )}
-            </Box>
-          </Box>
-        )}
       </DialogContent>
     </Dialog>
   );

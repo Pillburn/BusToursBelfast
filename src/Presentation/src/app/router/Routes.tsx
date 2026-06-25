@@ -8,23 +8,19 @@ import NotFound from "../../../feature/errors/NotFound";
 import ServerError from "../../../feature/errors/ServerError";
 
 
+// router.tsx
 export const router = createBrowserRouter([
-    {
-        path:'/',
-        element: <App/>,
-        children: [
-            
-            {path: 'tours', element: <Tours /> },
-            //{path: 'tours/:id', element: <TourDetailsPage/>},//(the :id is a placeholder for the url link to the specific id)
-            //{path: 'createTour', element: <TourForm key='create'/> },
-            //{path: 'manage/:id', element:<TourForm/> },
-           
-            {path: '', element: <HomePage/> },
-            {path: 'errors', element: <TestErrors/>},
-            {path: 'not-found', element:<NotFound/>},
-            {path: 'server-error', element:<ServerError/>},
-            {path: 'about', element: <AboutPage/>},
-            {path: '*', element: <Navigate replace to='/not-found'/>}
-        ]
-    }
-])
+  {
+    path: '/',
+    element: <App />,
+    children: [
+      { index: true, element: <HomePage /> },  // ✅ Use index: true for the default route
+      { path: 'tours', element: <Tours /> },
+      { path: 'about', element: <AboutPage /> },
+      { path: 'errors', element: <TestErrors /> },
+      { path: 'not-found', element: <NotFound /> },
+      { path: 'server-error', element: <ServerError /> },
+      { path: '*', element: <Navigate replace to='/not-found' /> }
+    ]
+  }
+]);

@@ -81,3 +81,6 @@ build/
 node_modules/
 *.min.js
 src/fix-automapper.sh
+src/Api/appsettings.Development.json
+src/Api/appsettings.Development.json
+src/Api/appsettings.Development.json

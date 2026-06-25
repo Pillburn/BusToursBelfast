@@ -4,21 +4,23 @@ namespace ToursApp.Domain.Entities;
 
 public class Charge : AuditableEntity
 {
+    public Guid Id { get; set; }
     public string StripeChargeId { get; set; } = string.Empty;
-    public string ChargeId { get; private set; } = string.Empty;
+    public string ChargeId { get;  set; } = string.Empty;
     public string StripePaymentIntentId { get; set; } = string.Empty;// Stripe Charge ID
-    public decimal Amount { get; private set; }           // In dollars (not cents)
+    public decimal Amount { get;  set; }           // In dollars (not cents)
     public decimal AmountRefunded { get; private set; }
-    public ChargeStatus Status { get; private set; }
+    public ChargeStatus Status { get;  set; }
     public DateTime? RefundedAt { get; private set; }
 
     public bool Captured { get; private set; }
     public DateTime? CapturedAt { get; private set; }
-    public string Currency { get; private set; } = string.Empty;      // e.g. "usd"
+    public string Currency { get; set; } = string.Empty;      // e.g. "usd"
     public string PaymentMethodType { get; set; } = string.Empty;
 
     public virtual Tour Tour {get;set;} = null!;
     public virtual Payment? Payment {get; set;}
+    public Guid PaymentId { get; set; }  // Foreign key to Payment
     public Charge(string chargeId, decimal amount, string currency, string createdBy)
         : base(createdBy) // This sets the required CreatedBy field
     {

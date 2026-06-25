@@ -7,7 +7,7 @@ namespace ToursApp.Application.Bookings.Commands.CreateBooking
 {
     public class CreateBookingCommand : IRequest<BookingPaymentResultDto>
     {
-        public Guid TourId { get; set; }
+        public string TourId { get; set; } = string.Empty;
         public string TourName { get; set; } = string.Empty;
         public decimal TourPrice { get; set; }
         public string CustomerName { get; set; } = string.Empty;

@@ -1,23 +1,32 @@
-﻿namespace ToursApp.Domain.Entities;
+﻿using ToursApp.Domain.Common;
+
+namespace ToursApp.Domain.Entities;
 
 
-public class Tour
+public class Tour: BaseEntity
 {
-    public Guid Id { get; set; }
+    
+    // Add a parameterless constructor for EF Core
     public string Title { get; set; } = string.Empty;
-    public DateTime Date { get; set; }
-    public string Description { get; private set; } = string.Empty;
-    public decimal Price { get; private set; }
-    public int GroupSize { get; private set; }
+    public string Description { get; set; } = string.Empty;
+    public decimal Price { get; set; }
+    public int GroupSize { get; set; }
     public string Location { get; set; } = string.Empty;
-    public DateTime BookingDate { get; private set; }
+    public DateTime BookingDate { get; set; }
     public DateTime TourDate { get; init; } 
     public bool IsActive { get; set; } = true;
     public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
-    // Private constructor for EF Core
-    public Tour() { }
+    public int MaxCapacity { get; set; }
 
-    public Tour(string name, string description, decimal price, int groupSize, DateTime tourDate)
+    // Private constructor for EF Core
+    public Tour() 
+            : base("system")
+    {
+        Id = Guid.NewGuid();
+        IsActive = true;
+    }
+    public Tour(string name, string description, decimal price, int groupSize, DateTime tourDate, string createdBy)
+            : base("system")
     {
         Id = Guid.NewGuid();
         Title = name;
@@ -28,6 +37,9 @@ public class Tour
         Validate();
     }
 
+    public Tour(string createdBy) : base(createdBy)
+    {
+    }
 
     public void Update(string name, string description, decimal price)
     {

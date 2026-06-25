@@ -17,7 +17,7 @@ public class PaymentIntent : BaseEntity
     public Money GetMoney() => new(Amount, Currency);
 
     // Enum for status (see below)
-    public PaymentIntentStatus Status { get; private set; }
+    public PaymentIntentStatus Status { get; set; }
 
     // Your application's reference (e.g. booking ID)
     public string? ApplicationReference { get; private set; }

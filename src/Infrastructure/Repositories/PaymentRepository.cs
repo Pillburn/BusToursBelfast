@@ -28,7 +28,7 @@ public class PaymentRepository : IPaymentRepository
         => await _context.Payments.AddAsync(payment, cancellationToken);
 
     // 4. Changed return type from Charge? to Payment
-    public async Task<Payment> GetByChargeIdAsync(string stripeChargeId)
+    public async Task<Payment?> GetByChargeIdAsync(string stripeChargeId)
         {var payment = await _context.Payments
         .Include(p => p.Charge)
         .Where(p => p.Charge != null && p.Charge.StripeChargeId == stripeChargeId)

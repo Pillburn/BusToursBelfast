@@ -163,12 +163,14 @@ namespace ToursApp.Application.Bookings.Commands.CreateBooking
         }
 
         // Custom validation methods
-        private async Task<bool> BeValidTour(Guid tourId, CancellationToken cancellationToken)
+        private async Task<bool> BeValidTour(string tourId, CancellationToken cancellationToken)
         {
-            if (tourId == Guid.Empty)
+            if (!Guid.TryParse(tourId, out var guid))
+            {
                 return false;
-
-            return await _tourRepository.TourExistsAsync(tourId);
+            }
+            var tour = await _tourRepository.GetTourByIdAsync(guid);
+            return tour != null;
         }
 
         private bool BeValidParticipantCount(CreateBookingCommand command, ParticipantCountDto participants)

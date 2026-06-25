@@ -157,6 +157,8 @@ csx/
 ecf/
 rcf/
 
+appsettings.Development.json
+
 # Microsoft Azure ApplicationInsights config file
 ApplicationInsights.config
 
