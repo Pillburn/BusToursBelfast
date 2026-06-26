@@ -19,6 +19,7 @@
     "@stripe/stripe-js": "^7.8.0",
     "@tanstack/react-query": "^5.95.2",
     "@tanstack/react-query-devtools": "^5.95.2",
+    "date-fns": "^4.4.0",
     "leaflet": "^1.9.4",
     "mobx": "^6.13.7",
     "mobx-react-lite": "^4.1.0",
