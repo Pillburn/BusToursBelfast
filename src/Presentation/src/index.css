@@ -18,6 +18,24 @@
   color: #ffffff !important;
 }
 
+/* index.css - Force drawer green */
+.MuiDrawer-paper {
+  background-color: #1a3c2a !important;
+  color: #ffffff !important;
+}
+
+.MuiDrawer-paper .MuiListItem-root {
+  color: #ffffff !important;
+}
+
+.MuiDrawer-paper .MuiListItem-root:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.MuiDrawer-paper .MuiListItemText-primary {
+  color: #ffffff !important;
+}
+
 .MuiAppBar-root .MuiTypography-root {
   color: #ffffff !important;
 }

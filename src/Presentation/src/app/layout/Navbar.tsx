@@ -21,7 +21,6 @@ const Navbar = () => {
     <AppBar 
       position="sticky"
       sx={{
-        // ✅ Force green colors
         backgroundColor: theme.palette.primary.main,
         backgroundImage: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
         color: theme.palette.common.white,
@@ -40,7 +39,7 @@ const Navbar = () => {
           }}
           onClick={() => navigate('/')}
         >
-          🇮🇪 Béal Feirste Turas
+          🇮🇪 Emerald Tours
         </Typography>
 
         {isMobile ? (
@@ -55,6 +54,8 @@ const Navbar = () => {
             >
               <MenuIcon />
             </IconButton>
+            
+            {/* ✅ Fixed Drawer with green background */}
             <Drawer
               anchor="right"
               open={drawerOpen}
@@ -67,7 +68,19 @@ const Navbar = () => {
                 }
               }}
             >
-              <List sx={{ mt: 4 }}>
+              <List sx={{ 
+                mt: 4,
+                '& .MuiListItem-root': {
+                  color: theme.palette.common.white,
+                  '&:hover': {
+                    backgroundColor: 'rgba(255,255,255,0.1)',
+                    borderRadius: 1,
+                  },
+                },
+                '& .MuiListItemText-primary': {
+                  color: theme.palette.common.white,
+                }
+              }}>
                 {navItems.map((item) => (
                   <ListItem 
                     key={item.path} 
@@ -75,14 +88,22 @@ const Navbar = () => {
                       navigate(item.path);
                       setDrawerOpen(false);
                     }}
-                    sx={{ 
-                      '&:hover': { 
+                    sx={{
+                      color: theme.palette.common.white,
+                      '&:hover': {
                         backgroundColor: 'rgba(255,255,255,0.1)',
                         borderRadius: 1,
                       }
                     }}
                   >
-                    <ListItemText primary={item.label} />
+                    <ListItemText 
+                      primary={item.label}
+                      sx={{
+                        '& .MuiListItemText-primary': {
+                          color: theme.palette.common.white,
+                        }
+                      }}
+                    />
                   </ListItem>
                 ))}
               </List>
@@ -93,7 +114,6 @@ const Navbar = () => {
             {navItems.map((item) => (
               <Button 
                 key={item.path} 
-                color="inherit" 
                 onClick={() => navigate(item.path)}
                 sx={{
                   color: theme.palette.common.white,
